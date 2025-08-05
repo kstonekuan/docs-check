@@ -1,0 +1,35 @@
+{
+  "name": "docs-check",
+  "version": "1.0.0",
+  "description": "Documentation checker using Claude Code SDK and GitHub integration",
+  "main": "dist/cli.js",
+  "type": "module",
+  "bin": {
+    "docs-check": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/cli.ts",
+    "start": "node dist/cli.js",
+    "lint": "biome lint src/",
+    "format": "biome format --write src/",
+    "check": "biome check --write src/",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": ["documentation", "github", "claude", "analysis"],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.13.1",
+  "dependencies": {
+    "@anthropic-ai/claude-code": "1.0.67",
+    "@octokit/rest": "22.0.0",
+    "commander": "14.0.0",
+    "simple-git": "3.28.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.1.3",
+    "@types/node": "24.2.0",
+    "tsx": "4.20.3",
+    "typescript": "5.9.2"
+  }
+}
