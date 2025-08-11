@@ -22,7 +22,7 @@ A powerful tool that analyzes GitHub repositories for documentation quality usin
 
 1.  Clone the repository:
     ```bash
-    git clone <repository-url>
+    git clone https://github.com/kstonekuan/docs-check.git
     cd docs-check
     ```
 
@@ -96,6 +96,8 @@ pnpm start https://github.com/owner/repo --quiet
 ## Output Examples
 
 ### Text Output
+
+![Example output showing documentation issues found](images/docs-check-output-text.png)
 
 ```
 📊 Documentation Analysis Results for owner/repo
