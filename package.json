@@ -21,14 +21,14 @@
   "license": "ISC",
   "packageManager": "pnpm@10.13.1",
   "dependencies": {
-    "@anthropic-ai/claude-code": "1.0.67",
+    "@anthropic-ai/claude-code": "1.0.72",
     "@octokit/rest": "22.0.0",
     "commander": "14.0.0",
     "simple-git": "3.28.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.1.3",
-    "@types/node": "24.2.0",
+    "@biomejs/biome": "2.1.4",
+    "@types/node": "24.2.1",
     "tsx": "4.20.3",
     "typescript": "5.9.2"
   }

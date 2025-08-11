@@ -3,7 +3,6 @@
 import { Command } from "commander";
 import { DocumentationAnalyzer } from "./doc-analyzer.js";
 import { GitOperations } from "./git-operations.js";
-import { GitHubClient } from "./github-client.js";
 import type { AppConfig, CliOptions, GitHubRepository } from "./types.js";
 
 function parseGitHubUrl(url: string): GitHubRepository {
@@ -49,25 +48,20 @@ async function main() {
     .description("Check documentation quality using Claude Code SDK and GitHub integration")
     .version("1.0.0")
     .argument("<github-url>", "GitHub repository URL to analyze")
-    .option("--create-issues", "Create GitHub issues for found problems", false)
-    .option("--create-pr", "Create a pull request with documentation fixes", false)
     .option("--output-format <format>", "Output format (json|text)", "text")
-    .option("--verbose", "Enable verbose logging", false)
+    .option("--quiet", "Disable verbose logging", false)
     .parse();
 
   try {
     const githubUrl = program.args[0];
-    const options = program.opts() as Omit<CliOptions, "createPullRequest"> & {
-      "create-issues": boolean;
-      "create-pr": boolean;
-      "output-format": "json" | "text";
+    const options = program.opts() as {
+      outputFormat: "json" | "text";
+      quiet: boolean;
     };
 
     const cliOptions: CliOptions = {
-      createIssues: options["create-issues"],
-      createPullRequest: options["create-pr"],
-      outputFormat: options["output-format"],
-      verbose: options.verbose,
+      outputFormat: options.outputFormat,
+      verbose: !options.quiet,
     };
 
     if (cliOptions.verbose) {
@@ -81,7 +75,6 @@ async function main() {
 
     // Initialize services
     const gitOps = new GitOperations(config.tempDirectory);
-    const githubClient = new GitHubClient(config.githubToken);
     const analyzer = new DocumentationAnalyzer(config.anthropicApiKey);
 
     // Clone repository
@@ -124,38 +117,6 @@ async function main() {
       }
     }
 
-    // Create GitHub issues if requested
-    if (cliOptions.createIssues && analysisResult.issues.length > 0) {
-      if (cliOptions.verbose) {
-        console.log("\n🔧 Creating GitHub issues...");
-      }
-
-      const issueResults = await githubClient.createIssuesFromAnalysis(repository, analysisResult);
-
-      if (cliOptions.outputFormat === "text") {
-        console.log(`\n✅ Created ${issueResults.length} GitHub issues:`);
-        for (const result of issueResults) {
-          console.log(`- Issue #${result.number}: ${result.url}`);
-        }
-      }
-    }
-
-    // Create pull request if requested
-    if (cliOptions.createPullRequest) {
-      if (cliOptions.verbose) {
-        console.log("\n🔧 Creating pull request with fixes...");
-      }
-
-      const prResult = await githubClient.createPullRequestWithFixes(
-        repository,
-        analysisResult,
-        repoPath
-      );
-
-      if (prResult && cliOptions.outputFormat === "text") {
-        console.log(`\n✅ Created pull request #${prResult.number}: ${prResult.url}`);
-      }
-    }
 
     // Cleanup
     await gitOps.cleanup(repoPath);

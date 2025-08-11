@@ -6,7 +6,6 @@ A powerful tool that analyzes GitHub repositories for documentation quality usin
 
 - 🔍 **Intelligent Analysis**: Uses Claude Code SDK to analyze documentation completeness, accuracy, and clarity
 - 🐳 **Containerized Execution**: Runs in isolated Docker containers for security
-- 🤖 **GitHub Integration**: Automatically creates issues and pull requests with fixes
 - 📊 **Detailed Reports**: Provides structured analysis with severity and effort levels
 - 🛠️ **Multiple Output Formats**: Supports JSON and human-readable text output
 
@@ -14,7 +13,7 @@ A powerful tool that analyzes GitHub repositories for documentation quality usin
 
 - Node.js 18+
 - Docker
-- GitHub Personal Access Token (with `repo`, `public_repo`, `issues:write`, `pull_requests:write` permissions)
+- GitHub Personal Access Token (with `repo`, `public_repo` permissions)
 - Anthropic API Key
 
 ## Installation
@@ -64,23 +63,11 @@ docker run --rm \
   -e ANTHROPIC_API_KEY \
   docs-check https://github.com/owner/repo
 
-# Verbose output for detailed progress
+# Quiet output (minimal logging)
 docker run --rm \
   -e GITHUB_TOKEN \
   -e ANTHROPIC_API_KEY \
-  docs-check https://github.com/owner/repo --verbose
-
-# Create GitHub issues for found problems
-docker run --rm \
-  -e GITHUB_TOKEN \
-  -e ANTHROPIC_API_KEY \
-  docs-check https://github.com/owner/repo --create-issues
-
-# Create a pull request with automatic fixes
-docker run --rm \
-  -e GITHUB_TOKEN \
-  -e ANTHROPIC_API_KEY \
-  docs-check https://github.com/owner/repo --create-pr
+  docs-check https://github.com/owner/repo --quiet
 
 # JSON output for programmatic use
 docker run --rm \
@@ -95,20 +82,15 @@ docker run --rm \
 # Basic analysis
 pnpm start https://github.com/owner/repo
 
-# With GitHub integration and verbose logging
-pnpm start https://github.com/owner/repo --create-issues --verbose
-
-# Development mode
-pnpm dev https://github.com/owner/repo --create-pr
+# With quiet output
+pnpm start https://github.com/owner/repo --quiet
 ```
 
 ## Command Line Options
 
 -   `<github-url>` - GitHub repository URL to analyze (required)
--   `--create-issues` - Create GitHub issues for found problems
--   `--create-pr` - Create a pull request with documentation fixes
 -   `--output-format <format>` - Output format: `json` or `text` (default: text)
--   `--verbose` - Enable verbose logging
+-   `--quiet` - Disable verbose logging (default: verbose enabled)
 -   `--help` - Show help information
 
 ## Output Examples

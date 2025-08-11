@@ -1,6 +1,4 @@
 export interface CliOptions {
-  createIssues: boolean;
-  createPullRequest: boolean;
   outputFormat: "json" | "text";
   verbose: boolean;
 }
